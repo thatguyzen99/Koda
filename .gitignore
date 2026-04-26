@@ -13,6 +13,11 @@
 # typescript incremental build cache
 *.tsbuildinfo
 
+# agent skills (per-developer; regenerate via `npx skills experimental_install`)
+.agents/
+.claude/
+.kiro/
+
 # production
 /build
 

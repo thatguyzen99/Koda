@@ -1,0 +1,49 @@
+name: build
+
+# Catch breakage before review. Runs `npm ci` + `npm run build` against
+# Node 20 on every push to main and every pull request. We don't run
+# tests yet — there are none — but the build pipeline already does
+# `tsc --noEmit` + the Next.js production build, which catches type
+# errors, broken imports, and prerender failures.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel any earlier in-progress run for the same ref so PRs only
+# show the latest result and we don't waste minutes on stale commits.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Build
+        # Build runs in "demo mode" — no env keys provided. The app is
+        # designed to fall back to mocks when env vars are missing, so
+        # the build works without secrets. If we ever need keys at
+        # build time, wire them up via repo secrets here.
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
