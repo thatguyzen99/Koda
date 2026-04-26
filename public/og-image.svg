@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0A2540"/>
+      <stop offset="100%" stop-color="#1B1444"/>
+    </linearGradient>
+    <radialGradient id="halo1" cx="180" cy="120" r="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#785e9f" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#785e9f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo2" cx="1020" cy="540" r="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f7cf87" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#f7cf87" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="koda" x1="0" y1="0" x2="195.22" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.03" stop-color="#4d285a"/>
+      <stop offset="0.29" stop-color="#785e9f"/>
+      <stop offset="0.48" stop-color="#ae87bd"/>
+      <stop offset="0.65" stop-color="#c7afd4"/>
+      <stop offset="0.74" stop-color="#cfa4be"/>
+      <stop offset="0.88" stop-color="#e3bcad"/>
+      <stop offset="1" stop-color="#f7cf87"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c9acce"/>
+      <stop offset="55%" stop-color="#e3bcad"/>
+      <stop offset="100%" stop-color="#f7cf87"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#halo1)"/>
+  <rect width="1200" height="630" fill="url(#halo2)"/>
+
+  <!-- Brand mark (Koda icon) -->
+  <g transform="translate(96, 90) scale(0.6)">
+    <rect x="81.79" y="0" width="21.12" height="168.34" fill="url(#koda)"/>
+    <path d="M195.22,30.26l-53.91,53.92,53.91,53.91v29.61l-.13.13-71.84-71.84c-6.52-6.52-6.52-17.09,0-23.6L195.09.53l.13.13v29.6Z" fill="url(#koda)"/>
+    <path d="M66.33,127.29l-43.38-43.38,43.38-43.39V10.66L4.88,72.11c-6.51,6.52-6.51,17.09,0,23.6l61.45,61.45v-29.87Z" fill="url(#koda)"/>
+  </g>
+  <text x="240" y="160" font-family="Urbanist, sans-serif" font-weight="800"
+        font-size="72" fill="white" letter-spacing="-2">Koda</text>
+
+  <!-- Headline -->
+  <text x="96" y="340" font-family="Urbanist, sans-serif" font-weight="800"
+        font-size="80" fill="white" letter-spacing="-3">Compliance-as-Code</text>
+  <text x="96" y="430" font-family="Urbanist, sans-serif" font-weight="800"
+        font-size="80" fill="url(#textGrad)" letter-spacing="-3">for the New Africa.</text>
+
+  <!-- Subhead -->
+  <text x="96" y="498" font-family="Plus Jakarta Sans, sans-serif" font-weight="500"
+        font-size="26" fill="rgba(255,255,255,0.75)">Audit schemas. Simulate flows. Generate compliance-ready PRDs.</text>
+
+  <!-- Footer chips -->
+  <g transform="translate(96, 548)" font-family="Plus Jakarta Sans, sans-serif" font-weight="600" font-size="20" fill="white">
+    <rect width="180" height="44" rx="22" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+    <text x="28" y="29">CBL-MFS · Liberia</text>
+    <g transform="translate(200, 0)">
+      <rect width="160" height="44" rx="22" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+      <text x="28" y="29">ECOWAS · Regional</text>
+    </g>
+    <g transform="translate(380, 0)">
+      <rect width="170" height="44" rx="22" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)"/>
+      <text x="28" y="29">Powered by Claude</text>
+    </g>
+  </g>
+</svg>

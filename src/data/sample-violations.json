@@ -1,0 +1,69 @@
+{
+  "$schema": "https://koda.dev/schemas/violations.v1.json",
+  "name": "Liberian Fintech — Sample Compliance Violations",
+  "description": "Realistic, presentation-ready compliance violations for a Liberian mobile-money / cross-border remittance application. Use this dataset to demo Koda's Auditor without making a live LLM call.",
+  "generated_at": "2026-04-26T03:00:00Z",
+  "jurisdiction": "Liberia",
+  "frameworks": [
+    "CBL-MFS-2023",
+    "ECOWAS-PSIF-2024",
+    "LDPA-2023"
+  ],
+  "violations": [
+    {
+      "id": "v-001",
+      "violation_type": "PII Encryption Failure",
+      "severity": "CRITICAL",
+      "description": "The `customers.national_id` column stores Liberian National ID numbers in plaintext. CBL-MFS Section 4.2 requires every PII column to be encrypted at rest with AES-256 or stronger and the encryption key managed via an HSM or KMS service.",
+      "affected_module": "core/db/customers",
+      "regulation_ref": "CBL-MFS-2023 §4.2",
+      "evidence": "customers.national_id VARCHAR(50) — no column-level encryption, no TDE, no application-layer crypto envelope.",
+      "timestamp": "2026-04-25T08:42:11Z",
+      "recommended_action": "Migrate `national_id` to a `BYTEA` column populated by AES-256-GCM ciphertext. Rotate plaintext values during the migration window and drop the cleartext column. Store the data-key in Supabase Vault or AWS KMS; never alongside the ciphertext."
+    },
+    {
+      "id": "v-002",
+      "violation_type": "Missing Transaction Audit Trail",
+      "severity": "CRITICAL",
+      "description": "The `transactions` table has no immutable audit log. CBL-MFS Section 5.1 and the Liberia AML Act require every state change on a transaction (create / approve / settle / reverse) to produce an append-only, tamper-evident record retained for 5+ years.",
+      "affected_module": "core/db/transactions",
+      "regulation_ref": "CBL-MFS-2023 §5.1, Liberia AML Act 2011 §17",
+      "evidence": "transactions table has UPDATE-able columns and no companion `transaction_audit_log` table; no triggers, no row-level history.",
+      "timestamp": "2026-04-25T08:42:14Z",
+      "recommended_action": "Create `transaction_audit_log` keyed by `transaction_id` with `action`, `actor_id`, `changed_fields JSONB`, `prev_hash`, `row_hash`, `created_at`. Populate via a `BEFORE UPDATE` trigger and chain `prev_hash → row_hash` so any row mutation breaks the chain. Replicate nightly to a write-once bucket for the 5-year retention requirement."
+    },
+    {
+      "id": "v-003",
+      "violation_type": "Cross-Border Reporting Gap",
+      "severity": "WARNING",
+      "description": "Outbound transactions to non-Liberian wallets do not capture the corridor metadata required by ECOWAS Directive D/2020/07 (origin country, destination country, settlement currency, sender ID type, beneficiary ID type). Without these fields the daily ECOWAS regulatory report cannot be generated.",
+      "affected_module": "services/transactions/cross-border",
+      "regulation_ref": "ECOWAS-PSIF-2024 §3.1, Directive D/2020/07",
+      "evidence": "TransactionDTO has `amount`, `currency`, `recipient_phone` but no `corridor`, `sender_id_type`, `beneficiary_id_type` fields.",
+      "timestamp": "2026-04-25T08:42:16Z",
+      "recommended_action": "Add `corridor` (origin/destination ISO 3166-1 alpha-3 codes), `settlement_currency`, `sender_id_type`, `beneficiary_id_type` to the transaction schema. Backfill from the user profile for in-flight transactions. Build a nightly export to the ECOWAS PSIF reporting endpoint."
+    },
+    {
+      "id": "v-004",
+      "violation_type": "KYC Tier Enforcement Missing",
+      "severity": "WARNING",
+      "description": "All wallets have an unbounded daily transaction ceiling. CBL-MFS Section 6.3 requires tiered KYC: Tier 1 (basic ID) → $200/day, Tier 2 (full ID + address) → $2,000/day, Tier 3 (enhanced due diligence) → $10,000/day. Enforcement is missing both at write-time and in the daily reconciliation job.",
+      "affected_module": "services/wallets/limits",
+      "regulation_ref": "CBL-MFS-2023 §6.3",
+      "evidence": "WalletPolicy has `daily_limit DECIMAL` initialized to NULL; no row-level CHECK constraint; transaction-create handler does not consult `customers.kyc_tier`.",
+      "timestamp": "2026-04-25T08:42:19Z",
+      "recommended_action": "Add `kyc_tier ENUM('tier_1','tier_2','tier_3')` to customers. Hard-code the per-tier ceiling table in code (it's a regulator-set value, not user config). Reject `INSERT INTO transactions` over the ceiling with a Postgres CHECK + a service-layer validator. Surface the daily-spend remaining in the customer-facing API."
+    },
+    {
+      "id": "v-005",
+      "violation_type": "Data Subject Access Pathway Missing",
+      "severity": "WARNING",
+      "description": "There is no implemented API or admin workflow for honoring data subject access, rectification, or deletion requests as required by the Liberia Data Protection Act §14–17. Without this, the company cannot meet the 30-day legal response window.",
+      "affected_module": "services/identity/dsar",
+      "regulation_ref": "LDPA-2023 §14, §15, §17",
+      "evidence": "No /dsar route, no admin Supabase RPC, no documented runbook in the repo.",
+      "timestamp": "2026-04-25T08:42:22Z",
+      "recommended_action": "Build a `/api/dsar` endpoint accepting `access`, `rectify`, `delete` request types, gated behind verified-identity auth. Admin UI to triage requests + fulfill within 30 days. Implement a soft-delete column on customers + a 30-day grace period before hard-delete to support the right to rectification."
+    }
+  ]
+}

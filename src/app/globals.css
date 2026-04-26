@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-navy: #0a2540;
+  --color-purple: #635bff;
+  --color-magenta: #ec4899;
+  --color-sky: #0ea5e9;
+  --color-bg: #f6f9fc;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #0ea5e9;
+}
+
+* {
+  border-color: rgb(226 232 240 / 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
+  @apply bg-[#F6F9FC] text-[#0A2540];
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-urbanist), 'Urbanist', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+@layer components {
+  /* Vibrant page surface — used by PageShell */
+  .page-surface {
+    position: relative;
+    isolation: isolate;
+    background-color: #F6F9FC;
+    background-image:
+      radial-gradient(at 18% 12%, rgba(99,91,255,0.14) 0px, transparent 55%),
+      radial-gradient(at 82% 8%, rgba(236,72,153,0.10) 0px, transparent 50%),
+      radial-gradient(at 65% 88%, rgba(14,165,233,0.10) 0px, transparent 55%),
+      radial-gradient(at 12% 92%, rgba(168,85,247,0.08) 0px, transparent 50%);
+  }
+
+  /* Frosted glass card surface */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.5) inset,
+      0 1px 2px 0 rgba(15, 23, 42, 0.04),
+      0 4px 16px -4px rgba(15, 23, 42, 0.08);
+  }
+
+  /* Brand gradient text — matches the Koda mark exactly. */
+  .text-gradient-vibrant,
+  .text-gradient-koda {
+    background: linear-gradient(135deg, #4d285a 0%, #785e9f 25%, #ae87bd 45%, #d59fb2 65%, #e3bcad 82%, #f7cf87 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Hairline divider with subtle gradient */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgb(15 23 42 / 0.08), transparent);
+  }
+
+  /* Tabular numerals for stats / counts */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  /* Soft elevated card */
+  .card-elevated {
+    @apply rounded-2xl bg-white border border-slate-200/60 shadow-[0_4px_12px_-2px_rgb(15_23_42/0.06),_0_2px_4px_-1px_rgb(15_23_42/0.04)] transition-all duration-300;
+  }
+  .card-elevated:hover {
+    @apply shadow-[0_12px_24px_-8px_rgb(99_91_255/0.18),_0_4px_8px_-2px_rgb(15_23_42/0.06)] -translate-y-0.5;
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[#635BFF]/40 focus-visible:ring-offset-2;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184 / 0.4);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(99 91 255 / 0.5);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+::selection {
+  background: rgba(99, 91, 255, 0.25);
+  color: #0A2540;
+}
+
+/* Shimmer skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(241 245 249) 0%,
+    rgb(226 232 240) 50%,
+    rgb(241 245 249) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
